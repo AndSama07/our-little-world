@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#161e31"/>
+      <stop offset="50%" stop-color="#0b0f19"/>
+      <stop offset="100%" stop-color="#070a12"/>
+    </linearGradient>
+
+    <!-- Heart Gradient -->
+    <linearGradient id="heartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fb7185"/>
+      <stop offset="50%" stop-color="#f43f5e"/>
+      <stop offset="100%" stop-color="#e11d48"/>
+    </linearGradient>
+
+    <!-- Glow Filter -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="16" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="24" result="blur" />
+    </filter>
+
+    <!-- Arc Gradient -->
+    <linearGradient id="arcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f43f5e" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#fbbf24" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- App Icon Base Squircle / Rounded Rect -->
+  <rect width="512" height="512" rx="115" fill="url(#bgGrad)"/>
+  <rect width="508" height="508" x="2" y="2" rx="113" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="3"/>
+
+  <!-- Subtle Ambient Glows -->
+  <circle cx="160" cy="180" r="140" fill="#f43f5e" opacity="0.18" filter="url(#softGlow)"/>
+  <circle cx="360" cy="340" r="150" fill="#38bdf8" opacity="0.14" filter="url(#softGlow)"/>
+
+  <!-- Orbital Connection Arc -->
+  <path d="M 120 330 C 180 160, 330 160, 392 310" 
+        fill="none" 
+        stroke="url(#arcGrad)" 
+        stroke-width="5" 
+        stroke-dasharray="8 8"
+        filter="url(#glow)"/>
+
+  <!-- Left Node (Santa Tecla) -->
+  <circle cx="120" cy="330" r="14" fill="#f43f5e" filter="url(#glow)"/>
+  <circle cx="120" cy="330" r="6" fill="#ffffff"/>
+
+  <!-- Right Node (Manila) -->
+  <circle cx="392" cy="310" r="14" fill="#38bdf8" filter="url(#glow)"/>
+  <circle cx="392" cy="310" r="6" fill="#ffffff"/>
+
+  <!-- Central Luminous Heart -->
+  <g transform="translate(256, 235) scale(0.95)" filter="url(#glow)">
+    <path d="M 0 -35 
+             C -20 -90, -95 -85, -95 -20 
+             C -95 35, -20 85, 0 115 
+             C 20 85, 95 35, 95 -20 
+             C 95 -85, 20 -90, 0 -35 Z" 
+          fill="url(#heartGrad)"/>
+  </g>
+
+  <!-- Traveling Golden Spark Star -->
+  <g transform="translate(256, 172)" filter="url(#glow)">
+    <circle cx="0" cy="0" r="10" fill="#fbbf24"/>
+    <circle cx="0" cy="0" r="5" fill="#ffffff"/>
+    <!-- 4-point star rays -->
+    <path d="M 0 -22 L 3 -6 L 19 0 L 3 6 L 0 22 L -3 6 L -19 0 L -3 -6 Z" fill="#fbbf24" opacity="0.9"/>
+  </g>
+
+  <!-- Constellation micro-dots -->
+  <circle cx="200" cy="110" r="3" fill="#ffffff" opacity="0.8"/>
+  <circle cx="320" cy="120" r="2.5" fill="#ffffff" opacity="0.6"/>
+  <circle cx="150" cy="220" r="2" fill="#ffffff" opacity="0.4"/>
+  <circle cx="370" cy="200" r="3" fill="#ffffff" opacity="0.5"/>
+</svg>

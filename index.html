@@ -1,0 +1,1947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- Mobile Viewport with safe-area support for iPhone notch/Dynamic Island & Android navbars -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Our Little World — 6 Months Together</title>
+
+  <!-- Mobile App Manifest & Theme -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b0f19">
+  <meta name="color-scheme" content="dark">
+  <meta name="format-detection" content="telephone=no">
+
+  <!-- iOS / Apple Web App Capabilities -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Our Little World">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.png">
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  
+  <!-- Google Fonts: Plus Jakarta Sans & Caveat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       VARIABLES & VISUAL THEME (Dark Mode Glassmorphism & Mobile App)
+       ========================================================================== */
+    :root {
+      --bg-dark: #0b0f19;
+      --card-bg: rgba(18, 24, 38, 0.65);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-border-hover: rgba(244, 63, 94, 0.28);
+      --card-glow: rgba(244, 63, 94, 0.08);
+
+      --color-rose: #f43f5e;
+      --color-rose-glow: rgba(244, 63, 94, 0.45);
+      --color-blue: #38bdf8;
+      --color-blue-glow: rgba(56, 189, 248, 0.4);
+      --color-gold: #fbbf24;
+      --color-gold-glow: rgba(251, 191, 36, 0.5);
+      --color-text-main: #f8fafc;
+      --color-text-muted: #94a3b8;
+      --color-text-subtle: #64748b;
+
+      --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-handwritten: 'Caveat', cursive, sans-serif;
+
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-full: 9999px;
+
+      --transition-smooth: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Reset & Native App Foundation */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      overscroll-behavior-y: none;
+      touch-action: manipulation;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--color-text-main);
+      font-family: var(--font-main);
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      overflow-x: hidden;
+      position: relative;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      -webkit-user-select: none;
+      user-select: none;
+      padding-top: max(1.25rem, env(safe-area-inset-top));
+      padding-bottom: max(2.5rem, env(safe-area-inset-bottom));
+      padding-left: max(1rem, env(safe-area-inset-left));
+      padding-right: max(1rem, env(safe-area-inset-right));
+    }
+
+    /* ==========================================================================
+       AMBIENT BACKGROUND: RADIAL GLOWS & STARS
+       ========================================================================== */
+    .ambient-background {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .ambient-glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.55;
+      animation: floatGlow 18s ease-in-out infinite alternate;
+    }
+
+    .glow-rose {
+      top: -10%;
+      left: -10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(244, 63, 94, 0.22) 0%, transparent 70%);
+    }
+
+    .glow-blue {
+      bottom: 10%;
+      right: -10%;
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.18) 0%, transparent 70%);
+      animation-delay: -7s;
+    }
+
+    .glow-center {
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, transparent 70%);
+      animation-delay: -12s;
+    }
+
+    @keyframes floatGlow {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(30px, -40px) scale(1.1); }
+      100% { transform: translate(-25px, 25px) scale(0.95); }
+    }
+
+    #starsCanvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.7;
+    }
+
+    /* ==========================================================================
+       MAIN APP CONTAINER
+       ========================================================================== */
+    .app-container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 920px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* ==========================================================================
+       GLASSMORPHISM CARD BASE
+       ========================================================================== */
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.45),
+                  inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+      transition: var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .glass-card:hover {
+      border-color: var(--card-border-hover);
+      box-shadow: 0 20px 42px -8px rgba(0, 0, 0, 0.55),
+                  0 0 24px -4px var(--card-glow);
+    }
+
+    /* ==========================================================================
+       TOP ACTIONS (MOBILE INSTALL BUTTON)
+       ========================================================================== */
+    .top-action-bar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      width: 100%;
+      padding: 0 0.25rem;
+    }
+
+    .btn-install-app {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.95rem;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #e2e8f0;
+      font-size: 0.775rem;
+      font-weight: 600;
+      font-family: var(--font-main);
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      transition: var(--transition-smooth);
+    }
+
+    .btn-install-app:hover {
+      background: rgba(244, 63, 94, 0.15);
+      border-color: rgba(244, 63, 94, 0.35);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    /* ==========================================================================
+       1. HEADER
+       ========================================================================== */
+    .header {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 0;
+    }
+
+    .badge-wrapper {
+      display: inline-flex;
+    }
+
+    .anniversary-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.45rem 1.15rem;
+      border-radius: var(--radius-full);
+      background: rgba(244, 63, 94, 0.12);
+      border: 1px solid rgba(244, 63, 94, 0.32);
+      color: #fda4af;
+      font-size: 0.825rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      box-shadow: 0 0 20px rgba(244, 63, 94, 0.2);
+    }
+
+    .badge-pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--color-rose);
+      box-shadow: 0 0 10px var(--color-rose);
+      animation: pulseDot 2s infinite;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.4); }
+    }
+
+    .main-title {
+      font-size: clamp(2.3rem, 6.5vw, 3.8rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      background: linear-gradient(135deg, #ffffff 30%, #ffd1dc 75%, #f43f5e 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 10px 30px rgba(244, 63, 94, 0.25);
+    }
+
+    .subtitle {
+      font-size: clamp(0.95rem, 2.8vw, 1.15rem);
+      color: var(--color-text-muted);
+      font-weight: 400;
+      max-width: 540px;
+      letter-spacing: -0.01em;
+    }
+
+    /* ==========================================================================
+       2. DUAL REAL-TIME CLOCKS
+       ========================================================================== */
+    .clocks-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 640px) {
+      .clocks-grid {
+        grid-template-columns: 1fr;
+        gap: 0.9rem;
+      }
+    }
+
+    .clock-card {
+      padding: 1.5rem 1.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      position: relative;
+    }
+
+    .clock-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .city-info {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .city-flag {
+      font-size: 1.5rem;
+      line-height: 1;
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+    }
+
+    .city-name {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--color-text-main);
+      letter-spacing: -0.01em;
+    }
+
+    .city-sub {
+      font-size: 0.75rem;
+      color: var(--color-text-subtle);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .status-pill {
+      font-size: 0.725rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-weight: 600;
+    }
+
+    .status-day {
+      background: rgba(251, 191, 36, 0.12);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      color: #fde68a;
+    }
+
+    .status-night {
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #c7d2fe;
+    }
+
+    .clock-display {
+      font-size: clamp(2rem, 5vw, 2.65rem);
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      color: #ffffff;
+      text-shadow: 0 4px 16px rgba(255, 255, 255, 0.1);
+    }
+
+    .clock-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 0.75rem;
+      font-size: 0.825rem;
+      color: var(--color-text-muted);
+    }
+
+    .tz-difference-badge {
+      font-size: 0.725rem;
+      font-weight: 600;
+      color: var(--color-blue);
+      background: rgba(56, 189, 248, 0.08);
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      border: 1px solid rgba(56, 189, 248, 0.18);
+    }
+
+    /* ==========================================================================
+       3. DYNAMIC CONNECTION CANVAS
+       ========================================================================== */
+    .canvas-card {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .canvas-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .section-eyebrow {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-rose);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .distance-pill {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #e2e8f0;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .canvas-wrapper {
+      position: relative;
+      width: 100%;
+      height: 230px;
+      border-radius: var(--radius-md);
+      background: radial-gradient(ellipse at 50% 100%, rgba(30, 41, 59, 0.6) 0%, rgba(11, 15, 25, 0.8) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      overflow: hidden;
+    }
+
+    #connectionCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .canvas-footer-note {
+      text-align: center;
+      font-size: 0.785rem;
+      color: var(--color-text-subtle);
+      font-style: italic;
+    }
+
+    /* ==========================================================================
+       4. LIVE ELAPSED TIME COUNTER
+       ========================================================================== */
+    .counter-card {
+      padding: 1.75rem 1.5rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 1.35rem;
+    }
+
+    .counter-title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      align-items: center;
+    }
+
+    .counter-heading {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--color-text-main);
+    }
+
+    .counter-caption {
+      font-size: 0.825rem;
+      color: var(--color-text-muted);
+    }
+
+    .countdown-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.9rem;
+    }
+
+    @media (max-width: 480px) {
+      .countdown-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+      }
+    }
+
+    .counter-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-md);
+      padding: 1.15rem 0.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+      position: relative;
+      transition: var(--transition-smooth);
+    }
+
+    .counter-item:hover {
+      background: rgba(244, 63, 94, 0.05);
+      border-color: rgba(244, 63, 94, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .counter-num {
+      font-size: clamp(2rem, 5.5vw, 2.75rem);
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+      background: linear-gradient(180deg, #ffffff 40%, #ffdbe4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 4px 10px rgba(244, 63, 94, 0.2));
+    }
+
+    .counter-lbl {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-muted);
+    }
+
+    /* ==========================================================================
+       5. INTERACTIVE CAPSULE ("Press if you miss me")
+       ========================================================================== */
+    .capsule-card {
+      padding: 2.25rem 1.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.75rem;
+      text-align: center;
+    }
+
+    .capsule-intro {
+      max-width: 480px;
+    }
+
+    .capsule-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.4rem;
+    }
+
+    .capsule-desc {
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
+    }
+
+    .btn-miss-you-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .btn-glow-ring {
+      position: absolute;
+      inset: -5px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, #f43f5e, #ec4899, #f59e0b);
+      opacity: 0.5;
+      filter: blur(14px);
+      z-index: 0;
+      animation: pulseAura 2.5s infinite;
+      transition: var(--transition-smooth);
+    }
+
+    @keyframes pulseAura {
+      0%, 100% { opacity: 0.45; transform: scale(0.98); }
+      50% { opacity: 0.85; transform: scale(1.05); }
+    }
+
+    .btn-miss-you {
+      position: relative;
+      z-index: 1;
+      appearance: none;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      padding: 1.05rem 2.25rem;
+      border-radius: var(--radius-full);
+      font-family: var(--font-main);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffffff;
+      background: linear-gradient(135deg, #f43f5e 0%, #ec4899 50%, #f59e0b 100%);
+      box-shadow: 0 10px 25px -4px rgba(244, 63, 94, 0.5),
+                  inset 0 1px 1px 0 rgba(255, 255, 255, 0.35);
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  box-shadow 0.2s ease;
+      touch-action: manipulation;
+    }
+
+    .btn-miss-you:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 16px 32px -4px rgba(244, 63, 94, 0.65),
+                  0 0 20px rgba(245, 158, 11, 0.35);
+    }
+
+    .btn-miss-you:active {
+      transform: translateY(1px) scale(0.97);
+    }
+
+    .btn-icon {
+      font-size: 1.25rem;
+      animation: heartbeat 1.8s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      14% { transform: scale(1.25); }
+      28% { transform: scale(1); }
+      42% { transform: scale(1.2); }
+      70% { transform: scale(1); }
+    }
+
+    .message-container {
+      width: 100%;
+      max-width: 620px;
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px dashed rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-md);
+      padding: 1.5rem 1.75rem;
+      position: relative;
+      transition: all 0.4s ease;
+    }
+
+    .message-container.has-message {
+      background: rgba(244, 63, 94, 0.04);
+      border-color: rgba(244, 63, 94, 0.3);
+      box-shadow: inset 0 0 30px rgba(244, 63, 94, 0.05);
+    }
+
+    .message-quote-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      opacity: 1;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .message-quote-wrap.fade-out {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+
+    .quote-decoration {
+      font-size: 1.5rem;
+      color: rgba(244, 63, 94, 0.4);
+      line-height: 1;
+    }
+
+    .handwritten-text {
+      font-family: var(--font-handwritten);
+      font-size: clamp(1.45rem, 4vw, 1.85rem);
+      line-height: 1.35;
+      color: #ffe4e6;
+      text-shadow: 0 2px 10px rgba(244, 63, 94, 0.25);
+    }
+
+    .message-meta {
+      font-size: 0.75rem;
+      color: var(--color-text-subtle);
+      font-family: var(--font-main);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* Floating love particles */
+    .floating-particle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      font-size: 1.5rem;
+      user-select: none;
+      will-change: transform, opacity;
+      animation: floatUpParticle var(--duration, 1.6s) cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+
+    @keyframes floatUpParticle {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(0.6) rotate(0deg);
+      }
+      60% {
+        opacity: 0.9;
+      }
+      100% {
+        opacity: 0;
+        transform: translate(var(--drift-x, 0px), var(--fly-y, -140px)) scale(1.4) rotate(var(--rot, 25deg));
+      }
+    }
+
+    /* ==========================================================================
+       MOBILE INSTALL MODAL (iOS & Android Guide Sheet)
+       ========================================================================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 10000;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .install-sheet {
+      background: #111726;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      width: 100%;
+      max-width: 520px;
+      padding: 1.75rem 1.5rem max(2rem, env(safe-area-inset-bottom));
+      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.7);
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .modal-backdrop.active .install-sheet {
+      transform: translateY(0);
+    }
+
+    .sheet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sheet-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .sheet-close-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      color: #94a3b8;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+
+    .platform-tabs {
+      display: flex;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 0.3rem;
+      border-radius: var(--radius-full);
+    }
+
+    .platform-tab {
+      flex: 1;
+      padding: 0.45rem;
+      background: none;
+      border: none;
+      border-radius: var(--radius-full);
+      color: var(--color-text-muted);
+      font-size: 0.825rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+    }
+
+    .platform-tab.active {
+      background: var(--color-rose);
+      color: #ffffff;
+      box-shadow: 0 2px 10px rgba(244, 63, 94, 0.4);
+    }
+
+    .tab-content {
+      display: none;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .tab-content.active {
+      display: flex;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 0.85rem 1rem;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: rgba(244, 63, 94, 0.2);
+      color: #fda4af;
+      font-weight: 700;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .step-text {
+      font-size: 0.875rem;
+      color: #e2e8f0;
+      line-height: 1.45;
+    }
+
+    .btn-native-install {
+      width: 100%;
+      padding: 0.95rem;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, #f43f5e 0%, #38bdf8 100%);
+      border: none;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(244, 63, 94, 0.4);
+      margin-top: 0.4rem;
+    }
+
+    /* ==========================================================================
+       FLOATING IOS & IN-APP HELPER TOAST
+       ========================================================================== */
+    .ios-helper-toast {
+      position: fixed;
+      bottom: max(1.25rem, env(safe-area-inset-bottom));
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 2rem);
+      max-width: 440px;
+      background: rgba(18, 24, 38, 0.94);
+      border: 1px solid rgba(244, 63, 94, 0.4);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: var(--radius-md);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7),
+                  0 0 25px rgba(244, 63, 94, 0.2);
+      padding: 0.95rem 1.15rem;
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      animation: slideUpToast 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes slideUpToast {
+      from { opacity: 0; transform: translate(-50%, 25px); }
+      to { opacity: 1; transform: translate(-50%, 0); }
+    }
+
+    .toast-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .toast-title {
+      font-size: 0.885rem;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .toast-close {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 0.2rem;
+      line-height: 1;
+    }
+
+    .toast-desc {
+      font-size: 0.815rem;
+      color: #cbd5e1;
+      line-height: 1.4;
+    }
+
+    .toast-desc strong {
+      color: #fda4af;
+    }
+
+    .toast-arrow {
+      text-align: center;
+      color: var(--color-rose);
+      font-size: 1.15rem;
+      line-height: 1;
+      margin-top: 0.25rem;
+      animation: bouncePointer 1.6s infinite;
+    }
+
+    @keyframes bouncePointer {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(5px); }
+    }
+
+    /* ==========================================================================
+       FOOTER
+       ========================================================================== */
+    .footer {
+      text-align: center;
+      font-size: 0.825rem;
+      color: var(--color-text-subtle);
+      padding: 0.5rem 0 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      align-items: center;
+    }
+
+    .footer-quote {
+      font-size: 0.75rem;
+      color: #64748b;
+    }
+
+    /* ==========================================================================
+       RESPONSIVE ADJUSTMENTS
+       ========================================================================== */
+    @media (max-width: 480px) {
+      .app-container {
+        gap: 1.15rem;
+      }
+      .clock-card {
+        padding: 1.2rem;
+      }
+      .canvas-card {
+        padding: 1.15rem;
+      }
+      .canvas-wrapper {
+        height: 190px;
+      }
+      .capsule-card {
+        padding: 1.75rem 1.25rem;
+      }
+      .btn-miss-you {
+        padding: 0.95rem 1.65rem;
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient background glows -->
+  <div class="ambient-background" aria-hidden="true">
+    <div class="ambient-glow glow-rose"></div>
+    <div class="ambient-glow glow-blue"></div>
+    <div class="ambient-glow glow-center"></div>
+  </div>
+
+  <!-- Twinkling stars background canvas -->
+  <canvas id="starsCanvas" aria-hidden="true"></canvas>
+
+  <!-- Main Mobile App Layout -->
+  <main class="app-container">
+
+    <!-- Top Action Bar (Install Mobile App) -->
+    <div class="top-action-bar">
+      <button id="btnOpenInstall" class="btn-install-app" type="button" aria-label="Install mobile app">
+        <span>📲</span>
+        <span>Install App</span>
+      </button>
+    </div>
+
+    <!-- 1. HEADER -->
+    <header class="header">
+      <div class="badge-wrapper">
+        <div class="anniversary-badge">
+          <span class="badge-pulse-dot" aria-hidden="true"></span>
+          <span>6 Months Together</span>
+        </div>
+      </div>
+      <h1 class="main-title">Our Little World</h1>
+      <p class="subtitle">The same heartbeat, no matter the distance</p>
+    </header>
+
+    <!-- 2. DUAL REAL-TIME CLOCKS -->
+    <section class="clocks-grid" aria-label="Synchronized dual timezones">
+      <!-- Clock 1: Santa Tecla -->
+      <article class="glass-card clock-card" id="clockSantaTecla">
+        <div class="clock-header">
+          <div class="city-info">
+            <span class="city-flag" role="img" aria-label="El Salvador">🇸🇻</span>
+            <div>
+              <h2 class="city-name">Santa Tecla</h2>
+              <p class="city-sub">El Salvador (UTC-6)</p>
+            </div>
+          </div>
+          <span class="status-pill status-day" id="statusSantaTecla">
+            <span id="iconSantaTecla">☀️</span>
+            <span id="lblStatusSantaTecla">Day</span>
+          </span>
+        </div>
+
+        <div class="clock-display" id="timeSantaTecla">--:--:--</div>
+
+        <div class="clock-meta">
+          <span id="dateSantaTecla">Loading date...</span>
+          <span class="tz-difference-badge">Home Base</span>
+        </div>
+      </article>
+
+      <!-- Clock 2: Manila -->
+      <article class="glass-card clock-card" id="clockManila">
+        <div class="clock-header">
+          <div class="city-info">
+            <span class="city-flag" role="img" aria-label="Philippines">🇵🇭</span>
+            <div>
+              <h2 class="city-name">Manila</h2>
+              <p class="city-sub">Philippines (UTC+8)</p>
+            </div>
+          </div>
+          <span class="status-pill status-night" id="statusManila">
+            <span id="iconManila">🌙</span>
+            <span id="lblStatusManila">Night</span>
+          </span>
+        </div>
+
+        <div class="clock-display" id="timeManila">--:--:--</div>
+
+        <div class="clock-meta">
+          <span id="dateManila">Loading date...</span>
+          <span class="tz-difference-badge">+14h Time Difference</span>
+        </div>
+      </article>
+    </section>
+
+    <!-- 3. DYNAMIC CONNECTION CANVAS -->
+    <section class="glass-card canvas-card" aria-label="Dynamic connection canvas between cities">
+      <div class="canvas-topbar">
+        <span class="section-eyebrow">
+          <span>✦</span> Continuous Emotional Bridge
+        </span>
+        <span class="distance-pill">
+          <span>✈️</span> ~14,800 km connected
+        </span>
+      </div>
+
+      <div class="canvas-wrapper">
+        <canvas id="connectionCanvas"></canvas>
+      </div>
+
+      <p class="canvas-footer-note">
+        A golden spark travels tirelessly between Santa Tecla and Manila, reminding us that heartbeats know no time zones.
+      </p>
+    </section>
+
+    <!-- 4. LIVE ELAPSED TIME COUNTER -->
+    <section class="glass-card counter-card" aria-label="Exact time spent together">
+      <div class="counter-title-group">
+        <h2 class="counter-heading">Time Spent Writing Our Story</h2>
+        <p class="counter-caption">Every single second by your side adds an entire universe of memories</p>
+      </div>
+
+      <div class="countdown-grid">
+        <div class="counter-item">
+          <span class="counter-num" id="counterDays">00</span>
+          <span class="counter-lbl">Days</span>
+        </div>
+        <div class="counter-item">
+          <span class="counter-num" id="counterHours">00</span>
+          <span class="counter-lbl">Hours</span>
+        </div>
+        <div class="counter-item">
+          <span class="counter-num" id="counterMinutes">00</span>
+          <span class="counter-lbl">Minutes</span>
+        </div>
+        <div class="counter-item">
+          <span class="counter-num" id="counterSeconds">00</span>
+          <span class="counter-lbl">Seconds</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. INTERACTIVE CAPSULE -->
+    <section class="glass-card capsule-card" aria-label="Interactive note capsule">
+      <div class="capsule-intro">
+        <h2 class="capsule-title">Heartbeat Capsule</h2>
+        <p class="capsule-desc">Whenever the distance feels heavy or you just need a warm hug across the screen...</p>
+      </div>
+
+      <div class="btn-miss-you-wrapper">
+        <div class="btn-glow-ring" aria-hidden="true"></div>
+        <button id="btnMissYou" class="btn-miss-you" type="button">
+          <span class="btn-icon" aria-hidden="true">💌</span>
+          <span>Press if you miss me</span>
+        </button>
+      </div>
+
+      <!-- Handwritten Message Display Box -->
+      <div id="messageContainer" class="message-container" aria-live="polite">
+        <div class="message-quote-wrap" id="messageQuoteWrap">
+          <span class="quote-decoration">❝</span>
+          <p class="handwritten-text" id="messageContent">
+            No matter what corner of the map dawn breaks on, you are always the first and last thought of my day.
+          </p>
+          <div class="message-meta">
+            <span>✨</span>
+            <span id="messageTimestamp">Press the button for a sweet note</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <p>Our Little World · Half a year of laughter, shared dreams, and love without borders</p>
+      <p class="footer-quote">Santa Tecla 🇸🇻 ⟷ Manila 🇵🇭 · 2026</p>
+    </footer>
+
+  </main>
+
+  <!-- ==========================================================================
+       INSTALL BOTTOM SHEET MODAL (iOS & Android Guide)
+       ========================================================================== -->
+  <div id="installModal" class="modal-backdrop" aria-hidden="true">
+    <div class="install-sheet" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="sheet-header">
+        <h3 id="modalTitle" class="sheet-title">
+          <span>📲</span> Install on Your Phone
+        </h3>
+        <button id="btnCloseModal" class="sheet-close-btn" type="button" aria-label="Close">✕</button>
+      </div>
+
+      <!-- OS Switcher Tabs -->
+      <div class="platform-tabs" role="tablist">
+        <button id="tabIos" class="platform-tab active" type="button" role="tab">
+          <span>🍏</span> iOS (iPhone)
+        </button>
+        <button id="tabAndroid" class="platform-tab" type="button" role="tab">
+          <span>🤖</span> Android
+        </button>
+      </div>
+
+      <!-- iOS Guide Tab Content -->
+      <div id="contentIos" class="tab-content active" role="tabpanel">
+        <div class="step-item">
+          <span class="step-num">1</span>
+          <p class="step-text">Open this page in <strong>Safari</strong> on your iPhone.</p>
+        </div>
+        <div class="step-item">
+          <span class="step-num">2</span>
+          <p class="step-text">Tap the <strong>Share</strong> button (📤) in the bottom navigation bar.</p>
+        </div>
+        <div class="step-item">
+          <span class="step-num">3</span>
+          <p class="step-text">Scroll down and tap <strong>"Add to Home Screen"</strong> (➕).</p>
+        </div>
+        <div class="step-item">
+          <span class="step-num">4</span>
+          <p class="step-text">Tap <strong>"Add"</strong>. The app icon will appear right on your iPhone home screen in fullscreen mode!</p>
+        </div>
+      </div>
+
+      <!-- Android Guide Tab Content -->
+      <div id="contentAndroid" class="tab-content" role="tabpanel">
+        <div class="step-item">
+          <span class="step-num">1</span>
+          <p class="step-text">Open this page in <strong>Chrome</strong> on your Android phone.</p>
+        </div>
+        <div class="step-item">
+          <span class="step-num">2</span>
+          <p class="step-text">Tap the button below or tap the Chrome menu (<strong>⋮</strong>) and choose <strong>"Install app"</strong>.</p>
+        </div>
+        <button id="btnNativeInstallPrompt" class="btn-native-install" type="button">
+          Install to Android Device 🚀
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Helper for iOS / In-App Browsers -->
+  <div id="iosHelperToast" class="ios-helper-toast" style="display: none;" role="alert">
+    <div class="toast-top">
+      <span class="toast-title" id="toastTitle">
+        <span>📲</span> Install on your iPhone
+      </span>
+      <button id="btnCloseToast" class="toast-close" type="button" aria-label="Close notification">✕</button>
+    </div>
+    <p class="toast-desc" id="toastDesc">
+      Tap the <strong>Share button (📤)</strong> below, then select <strong>"Add to Home Screen" (➕)</strong>.
+    </p>
+    <div class="toast-arrow" id="toastArrow" aria-hidden="true">▼</div>
+  </div>
+
+  <!-- ==========================================================================
+       VANILLA JAVASCRIPT (MODULAR & CLEAN)
+       ========================================================================== -->
+  <script>
+    /**
+     * CENTRALIZED CONFIGURATION (Easily customize dates, timezones & messages)
+     */
+    const CONFIG = {
+      // 1. Starting date of your journey (Year, Month - 1, Day, Hour, Minute)
+      // Note: In JavaScript Date(), months are 0-indexed: 0 = Jan, 1 = Feb, 2 = Mar, 3 = Apr, etc.
+      // Defaulted to 6 months prior:
+      startDate: new Date('2026-04-01T00:00:00'),
+
+      // 2. IANA Timezones
+      timezones: {
+        santaTecla: 'America/El_Salvador',
+        manila: 'Asia/Manila'
+      },
+
+      // 3. Predefined thoughtful, comforting & romantic messages
+      messages: [
+        "Even when the sun is setting here and just rising there, we are under the exact same sky looking at the very same stars.",
+        "Distance has only proven how strong, resilient, and genuine our love truly is. I choose you today and every tomorrow.",
+        "One less day apart, and one day closer to holding each other without goodbyes. Every single second is worth it.",
+        "Close your eyes for a moment: take a deep breath, feel the peace, and remember that I carry you with me everywhere I go.",
+        "No matter how many time zones stand between us, my heart always beats right on time whenever you cross my mind.",
+        "14,800 kilometers mean nothing compared to the infinite certainty of having found my favorite person.",
+        "You are my favorite calm in the middle of chaos and my sweetest dream come to life. I love you with all my heart.",
+        "There is no ocean vast enough and no distance long enough to cool the warmth you bring me with a single 'good morning'.",
+        "Thank you for these 6 months of patience, shared laughter across oceans, and unconditional love. Here's to forever.",
+        "Whenever you look up at the moon tonight, remember that the exact same light is shining over me, thinking of you."
+      ]
+    };
+
+    /* ==========================================================================
+       SYSTEM 1: DUAL REAL-TIME CLOCKS
+       ========================================================================== */
+    class DualClocks {
+      constructor() {
+        this.timeST = document.getElementById('timeSantaTecla');
+        this.dateST = document.getElementById('dateSantaTecla');
+        this.statusST = document.getElementById('statusSantaTecla');
+        this.iconST = document.getElementById('iconSantaTecla');
+        this.lblST = document.getElementById('lblStatusSantaTecla');
+
+        this.timeMN = document.getElementById('timeManila');
+        this.dateMN = document.getElementById('dateManila');
+        this.statusMN = document.getElementById('statusManila');
+        this.iconMN = document.getElementById('iconManila');
+        this.lblMN = document.getElementById('lblStatusManila');
+
+        this.dateFormatterST = new Intl.DateTimeFormat('en-US', {
+          timeZone: CONFIG.timezones.santaTecla,
+          weekday: 'short',
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric'
+        });
+
+        this.dateFormatterMN = new Intl.DateTimeFormat('en-US', {
+          timeZone: CONFIG.timezones.manila,
+          weekday: 'short',
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric'
+        });
+
+        this.update();
+        setInterval(() => this.update(), 1000);
+      }
+
+      getTimeParts(timeZone) {
+        const now = new Date();
+        const formatter = new Intl.DateTimeFormat('en-GB', {
+          timeZone,
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false
+        });
+        const parts = formatter.formatToParts(now);
+        const map = {};
+        parts.forEach(p => map[p.type] = p.value);
+        return {
+          hours: parseInt(map.hour, 10),
+          minutes: map.minute,
+          seconds: map.second,
+          formattedTime: `${map.hour}:${map.minute}:${map.second}`
+        };
+      }
+
+      applyDayNightTheme(hours, statusEl, iconEl, lblEl) {
+        // Daylight considered from 06:00 to 18:00
+        const isDay = hours >= 6 && hours < 18;
+        if (isDay) {
+          statusEl.className = 'status-pill status-day';
+          iconEl.textContent = '☀️';
+          lblEl.textContent = 'Day';
+        } else {
+          statusEl.className = 'status-pill status-night';
+          iconEl.textContent = '🌙';
+          lblEl.textContent = 'Night';
+        }
+      }
+
+      update() {
+        const now = new Date();
+
+        // Santa Tecla
+        const stTime = this.getTimeParts(CONFIG.timezones.santaTecla);
+        this.timeST.textContent = stTime.formattedTime;
+        this.dateST.textContent = this.dateFormatterST.format(now);
+        this.applyDayNightTheme(stTime.hours, this.statusST, this.iconST, this.lblST);
+
+        // Manila
+        const mnTime = this.getTimeParts(CONFIG.timezones.manila);
+        this.timeMN.textContent = mnTime.formattedTime;
+        this.dateMN.textContent = this.dateFormatterMN.format(now);
+        this.applyDayNightTheme(mnTime.hours, this.statusMN, this.iconMN, this.lblMN);
+      }
+    }
+
+    /* ==========================================================================
+       SYSTEM 2: DYNAMIC CONNECTION CANVAS (HTML5 Canvas)
+       ========================================================================== */
+    class ConnectionCanvas {
+      constructor(canvasId) {
+        this.canvas = document.getElementById(canvasId);
+        this.ctx = this.canvas.getContext('2d');
+        this.dpr = window.devicePixelRatio || 1;
+
+        // Particle travel progress state
+        this.progress = 0; // 0 to 1
+        this.direction = 1; // 1 = Santa Tecla -> Manila, -1 = Manila -> Santa Tecla
+        this.speed = 0.0035;
+        this.pulseTime = 0;
+
+        // Comet tail history
+        this.trail = [];
+        this.maxTrailLength = 12;
+
+        this.handleResize = this.resize.bind(this);
+        window.addEventListener('resize', this.handleResize);
+
+        this.resize();
+        this.animate = this.animate.bind(this);
+        requestAnimationFrame(this.animate);
+      }
+
+      resize() {
+        const rect = this.canvas.getBoundingClientRect();
+        this.width = rect.width;
+        this.height = rect.height;
+
+        this.canvas.width = this.width * this.dpr;
+        this.canvas.height = this.height * this.dpr;
+        this.ctx.resetTransform?.() || this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+        this.ctx.scale(this.dpr, this.dpr);
+
+        // Responsive anchor coordinates
+        this.nodeST = {
+          x: this.width * 0.14,
+          y: this.height * 0.72,
+          name: "Santa Tecla",
+          country: "🇸🇻",
+          color: "#f43f5e"
+        };
+
+        this.nodeMN = {
+          x: this.width * 0.86,
+          y: this.height * 0.42,
+          name: "Manila",
+          country: "🇵🇭",
+          color: "#38bdf8"
+        };
+
+        // Smooth cubic Bézier control points
+        this.cp1 = {
+          x: this.width * 0.35,
+          y: this.height * 0.12
+        };
+        this.cp2 = {
+          x: this.width * 0.65,
+          y: this.height * 0.12
+        };
+      }
+
+      getBezierPoint(t) {
+        const u = 1 - t;
+        const tt = t * t;
+        const uu = u * u;
+        const uuu = uu * u;
+        const ttt = tt * t;
+
+        const p0 = this.nodeST;
+        const p1 = this.cp1;
+        const p2 = this.cp2;
+        const p3 = this.nodeMN;
+
+        const x = uuu * p0.x + 3 * uu * t * p1.x + 3 * u * tt * p2.x + ttt * p3.x;
+        const y = uuu * p0.y + 3 * uu * t * p1.y + 3 * u * tt * p2.y + ttt * p3.y;
+        return { x, y };
+      }
+
+      drawNode(node) {
+        const ctx = this.ctx;
+
+        // Expanding pulse wave
+        const pulseRadius = 8 + (Math.sin(this.pulseTime * 2.5) + 1) * 6;
+        const pulseAlpha = Math.max(0, 0.4 - (pulseRadius - 8) / 18);
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, pulseRadius, 0, Math.PI * 2);
+        ctx.strokeStyle = node.color;
+        ctx.globalAlpha = pulseAlpha;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Glowing core
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, 5, 0, Math.PI * 2);
+        ctx.fillStyle = node.color;
+        ctx.shadowColor = node.color;
+        ctx.shadowBlur = 12;
+        ctx.globalAlpha = 0.95;
+        ctx.fill();
+
+        // White nucleus center
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = "#ffffff";
+        ctx.shadowBlur = 0;
+        ctx.globalAlpha = 1;
+        ctx.fill();
+
+        // City & Flag label
+        ctx.font = '600 11px "Plus Jakarta Sans", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = "#e2e8f0";
+        ctx.shadowColor = "rgba(0, 0, 0, 0.8)";
+        ctx.shadowBlur = 4;
+        const labelY = node === this.nodeST ? node.y + 20 : node.y - 14;
+        ctx.fillText(`${node.country} ${node.name}`, node.x, labelY);
+
+        ctx.restore();
+      }
+
+      animate() {
+        this.pulseTime += 0.02;
+
+        // Progress update with smooth ping-pong bounce
+        this.progress += this.speed * this.direction;
+        if (this.progress >= 1) {
+          this.progress = 1;
+          this.direction = -1;
+        } else if (this.progress <= 0) {
+          this.progress = 0;
+          this.direction = 1;
+        }
+
+        const currentPos = this.getBezierPoint(this.progress);
+
+        // Store trail
+        this.trail.push({ ...currentPos });
+        if (this.trail.length > this.maxTrailLength) {
+          this.trail.shift();
+        }
+
+        this.ctx.clearRect(0, 0, this.width, this.height);
+
+        // 1. Subtle continuous guide arc
+        const ctx = this.ctx;
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(this.nodeST.x, this.nodeST.y);
+        ctx.bezierCurveTo(this.cp1.x, this.cp1.y, this.cp2.x, this.cp2.y, this.nodeMN.x, this.nodeMN.y);
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.07)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // 2. Dotted connection line
+        ctx.beginPath();
+        ctx.moveTo(this.nodeST.x, this.nodeST.y);
+        ctx.bezierCurveTo(this.cp1.x, this.cp1.y, this.cp2.x, this.cp2.y, this.nodeMN.x, this.nodeMN.y);
+        ctx.setLineDash([4, 6]);
+        ctx.strokeStyle = "rgba(244, 63, 94, 0.35)";
+        ctx.lineWidth = 1.5;
+        ctx.shadowColor = "rgba(244, 63, 94, 0.3)";
+        ctx.shadowBlur = 6;
+        ctx.stroke();
+        ctx.restore();
+
+        // 3. Glowing trail particles
+        for (let i = 0; i < this.trail.length; i++) {
+          const pt = this.trail[i];
+          const ratio = (i + 1) / this.trail.length;
+          const radius = 2 + ratio * 2;
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, radius, 0, Math.PI * 2);
+          ctx.fillStyle = "#fbbf24";
+          ctx.globalAlpha = ratio * 0.35;
+          ctx.shadowColor = "#fbbf24";
+          ctx.shadowBlur = 8;
+          ctx.fill();
+          ctx.restore();
+        }
+
+        // 4. Main golden glowing head particle
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(currentPos.x, currentPos.y, 4.5, 0, Math.PI * 2);
+        ctx.fillStyle = "#fbbf24";
+        ctx.shadowColor = "#fbbf24";
+        ctx.shadowBlur = 18;
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(currentPos.x, currentPos.y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = "#ffffff";
+        ctx.shadowBlur = 0;
+        ctx.fill();
+        ctx.restore();
+
+        // 5. City nodes
+        this.drawNode(this.nodeST);
+        this.drawNode(this.nodeMN);
+
+        requestAnimationFrame(this.animate);
+      }
+    }
+
+    /* ==========================================================================
+       SYSTEM 3: LIVE ELAPSED TIME COUNTER
+       ========================================================================== */
+    class LiveCounter {
+      constructor() {
+        this.daysEl = document.getElementById('counterDays');
+        this.hoursEl = document.getElementById('counterHours');
+        this.minutesEl = document.getElementById('counterMinutes');
+        this.secondsEl = document.getElementById('counterSeconds');
+
+        this.update();
+        setInterval(() => this.update(), 1000);
+      }
+
+      pad(n) {
+        return String(n).padStart(2, '0');
+      }
+
+      update() {
+        const now = new Date();
+        const diffMs = Math.max(0, now.getTime() - CONFIG.startDate.getTime());
+
+        const totalSecs = Math.floor(diffMs / 1000);
+        const days = Math.floor(totalSecs / (3600 * 24));
+        const hours = Math.floor((totalSecs % (3600 * 24)) / 3600);
+        const minutes = Math.floor((totalSecs % 3600) / 60);
+        const seconds = totalSecs % 60;
+
+        this.daysEl.textContent = this.pad(days);
+        this.hoursEl.textContent = this.pad(hours);
+        this.minutesEl.textContent = this.pad(minutes);
+        this.secondsEl.textContent = this.pad(seconds);
+      }
+    }
+
+    /* ==========================================================================
+       SYSTEM 4: INTERACTIVE CAPSULE & HAPTICS
+       ========================================================================== */
+    class InteractiveCapsule {
+      constructor() {
+        this.btn = document.getElementById('btnMissYou');
+        this.messageContainer = document.getElementById('messageContainer');
+        this.messageWrap = document.getElementById('messageQuoteWrap');
+        this.messageContent = document.getElementById('messageContent');
+        this.timestampEl = document.getElementById('messageTimestamp');
+
+        this.lastMessageIndex = -1;
+        this.audioCtx = null;
+
+        this.emojis = ['❤️', '✨', '💖', '🌸', '💫', '🌹', '💌', '🪐', '🥰', '🌙'];
+
+        this.btn.addEventListener('click', (e) => this.handleClick(e));
+      }
+
+      // Native mobile haptic vibration
+      triggerHapticFeedback() {
+        if ('vibrate' in navigator) {
+          try {
+            navigator.vibrate([30, 40, 45]);
+          } catch (e) {}
+        }
+      }
+
+      // Gentle celestial synthesizer chime via native Web Audio API
+      playGentleChime() {
+        try {
+          if (!this.audioCtx) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            this.audioCtx = new AudioContext();
+          }
+          if (this.audioCtx.state === 'suspended') {
+            this.audioCtx.resume();
+          }
+
+          const now = this.audioCtx.currentTime;
+          const osc1 = this.audioCtx.createOscillator();
+          const osc2 = this.audioCtx.createOscillator();
+          const gainNode = this.audioCtx.createGain();
+
+          osc1.type = 'sine';
+          osc2.type = 'triangle';
+
+          osc1.frequency.setValueAtTime(659.25, now);
+          osc2.frequency.setValueAtTime(783.99, now);
+
+          gainNode.gain.setValueAtTime(0.001, now);
+          gainNode.gain.exponentialRampToValueAtTime(0.12, now + 0.05);
+          gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.85);
+
+          osc1.connect(gainNode);
+          osc2.connect(gainNode);
+          gainNode.connect(this.audioCtx.destination);
+
+          osc1.start(now);
+          osc2.start(now);
+          osc1.stop(now + 0.9);
+          osc2.stop(now + 0.9);
+        } catch {
+          // Gracefully continue silently if blocked
+        }
+      }
+
+      spawnParticles(clickEvent) {
+        const rect = this.btn.getBoundingClientRect();
+        const startX = clickEvent.clientX || (rect.left + rect.width / 2);
+        const startY = clickEvent.clientY || (rect.top + rect.height / 2);
+
+        const particleCount = 18;
+
+        for (let i = 0; i < particleCount; i++) {
+          const particle = document.createElement('span');
+          particle.className = 'floating-particle';
+          particle.textContent = this.emojis[Math.floor(Math.random() * this.emojis.length)];
+
+          const driftX = (Math.random() - 0.5) * 220;
+          const flyY = - (100 + Math.random() * 150);
+          const rotation = (Math.random() - 0.5) * 80;
+          const duration = 1.2 + Math.random() * 0.8;
+
+          particle.style.left = `${startX}px`;
+          particle.style.top = `${startY}px`;
+          particle.style.setProperty('--drift-x', `${driftX}px`);
+          particle.style.setProperty('--fly-y', `${flyY}px`);
+          particle.style.setProperty('--rot', `${rotation}deg`);
+          particle.style.setProperty('--duration', `${duration}s`);
+
+          document.body.appendChild(particle);
+
+          setTimeout(() => {
+            particle.remove();
+          }, duration * 1000);
+        }
+      }
+
+      getRandomMessage() {
+        let newIndex;
+        do {
+          newIndex = Math.floor(Math.random() * CONFIG.messages.length);
+        } while (newIndex === this.lastMessageIndex && CONFIG.messages.length > 1);
+
+        this.lastMessageIndex = newIndex;
+        return CONFIG.messages[newIndex];
+      }
+
+      showNewMessage() {
+        const nextMessage = this.getRandomMessage();
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        this.messageWrap.classList.add('fade-out');
+
+        setTimeout(() => {
+          this.messageContent.textContent = nextMessage;
+          this.timestampEl.textContent = `Sent with love at ${timeStr}`;
+          this.messageContainer.classList.add('has-message');
+          this.messageWrap.classList.remove('fade-out');
+        }, 220);
+      }
+
+      handleClick(e) {
+        this.triggerHapticFeedback();
+        this.playGentleChime();
+        this.spawnParticles(e);
+        this.showNewMessage();
+      }
+    }
+
+    /* ==========================================================================
+       SYSTEM 5: AMBIENT TWINKLING STARS
+       ========================================================================== */
+    class BackgroundStars {
+      constructor(canvasId) {
+        this.canvas = document.getElementById(canvasId);
+        this.ctx = this.canvas.getContext('2d');
+        this.stars = [];
+        this.starCount = 55;
+
+        this.resize = this.resize.bind(this);
+        window.addEventListener('resize', this.resize);
+        this.resize();
+
+        this.animate = this.animate.bind(this);
+        requestAnimationFrame(this.animate);
+      }
+
+      resize() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+        this.stars = [];
+        for (let i = 0; i < this.starCount; i++) {
+          this.stars.push({
+            x: Math.random() * this.canvas.width,
+            y: Math.random() * this.canvas.height,
+            size: Math.random() * 1.5 + 0.5,
+            baseAlpha: Math.random() * 0.5 + 0.2,
+            twinkleSpeed: Math.random() * 0.02 + 0.005,
+            offset: Math.random() * Math.PI * 2
+          });
+        }
+      }
+
+      animate() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        const time = Date.now() * 0.001;
+
+        for (const star of this.stars) {
+          const alpha = star.baseAlpha + Math.sin(time * star.twinkleSpeed * 50 + star.offset) * 0.25;
+          this.ctx.beginPath();
+          this.ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+          this.ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0.05, Math.min(1, alpha))})`;
+          this.ctx.fill();
+        }
+
+        requestAnimationFrame(this.animate);
+      }
+    }
+
+    /* ==========================================================================
+       SYSTEM 6: MOBILE INSTALL SHEET CONTROLLER (iOS & Android)
+       ========================================================================== */
+    class MobileInstallManager {
+      constructor() {
+        this.btnOpen = document.getElementById('btnOpenInstall');
+        this.modal = document.getElementById('installModal');
+        this.btnClose = document.getElementById('btnCloseModal');
+        this.tabIos = document.getElementById('tabIos');
+        this.tabAndroid = document.getElementById('tabAndroid');
+        this.contentIos = document.getElementById('contentIos');
+        this.contentAndroid = document.getElementById('contentAndroid');
+        this.btnNativeInstall = document.getElementById('btnNativeInstallPrompt');
+
+        this.deferredPrompt = null;
+
+        // Listen for native Android install prompt event
+        window.addEventListener('beforeinstallprompt', (e) => {
+          e.preventDefault();
+          this.deferredPrompt = e;
+        });
+
+        // Hide install button if running in standalone PWA / Native container
+        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+          this.btnOpen.style.display = 'none';
+        }
+
+        // Detect OS and pre-select appropriate tab
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+        const isInApp = /FBAN|FBAV|Instagram|WhatsApp|Line|Twitter|Messenger/i.test(userAgent);
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+
+        if (isIOS) {
+          this.switchTab('ios');
+          
+          // Automatic iOS Helper Toast
+          if (!isStandalone) {
+            const toast = document.getElementById('iosHelperToast');
+            const toastTitle = document.getElementById('toastTitle');
+            const toastDesc = document.getElementById('toastDesc');
+            const toastArrow = document.getElementById('toastArrow');
+            const btnCloseToast = document.getElementById('btnCloseToast');
+
+            if (toast && !sessionStorage.getItem('dismissedIosToast')) {
+              if (isInApp) {
+                toastTitle.innerHTML = '<span>⚠️</span> Open in Safari first';
+                toastDesc.innerHTML = 'You are viewing inside WhatsApp/in-app browser. Tap the <strong>three dots (⋯)</strong> or <strong>Compass (🧭)</strong> and select <strong>"Open in Safari"</strong> to install!';
+                toastArrow.style.display = 'none';
+              } else {
+                toastTitle.innerHTML = '<span>❤️</span> Add to your iPhone Home Screen';
+                toastDesc.innerHTML = 'Tap the <strong>Share button (📤)</strong> at the bottom of your screen, then tap <strong>"Add to Home Screen" (➕)</strong>!';
+                toastArrow.style.display = 'block';
+              }
+              toast.style.display = 'flex';
+
+              if (btnCloseToast) {
+                btnCloseToast.addEventListener('click', () => {
+                  toast.style.display = 'none';
+                  sessionStorage.setItem('dismissedIosToast', 'true');
+                });
+              }
+            }
+          }
+        } else {
+          this.switchTab('android');
+        }
+
+        this.btnOpen.addEventListener('click', () => this.openModal());
+        this.btnClose.addEventListener('click', () => this.closeModal());
+        this.modal.addEventListener('click', (e) => {
+          if (e.target === this.modal) this.closeModal();
+        });
+
+        this.tabIos.addEventListener('click', () => this.switchTab('ios'));
+        this.tabAndroid.addEventListener('click', () => this.switchTab('android'));
+
+        this.btnNativeInstall.addEventListener('click', () => this.triggerNativeInstall());
+      }
+
+      openModal() {
+        this.modal.classList.add('active');
+        this.modal.setAttribute('aria-hidden', 'false');
+      }
+
+      closeModal() {
+        this.modal.classList.remove('active');
+        this.modal.setAttribute('aria-hidden', 'true');
+      }
+
+      switchTab(platform) {
+        if (platform === 'ios') {
+          this.tabIos.classList.add('active');
+          this.tabAndroid.classList.remove('active');
+          this.contentIos.classList.add('active');
+          this.contentAndroid.classList.remove('active');
+        } else {
+          this.tabAndroid.classList.add('active');
+          this.tabIos.classList.remove('active');
+          this.contentAndroid.classList.add('active');
+          this.contentIos.classList.remove('active');
+        }
+      }
+
+      triggerNativeInstall() {
+        if (this.deferredPrompt) {
+          this.deferredPrompt.prompt();
+          this.deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+              this.closeModal();
+            }
+            this.deferredPrompt = null;
+          });
+        } else {
+          alert("To install on Android: Tap the three dots (⋮) in the top-right corner of Chrome and select 'Install app' or 'Add to Home screen'.");
+        }
+      }
+    }
+
+    /* ==========================================================================
+       REGISTER SERVICE WORKER (100% Offline Capability)
+       ========================================================================== */
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(registration => {
+            console.log('App ServiceWorker registered successfully:', registration.scope);
+          })
+          .catch(error => {
+            console.log('App ServiceWorker registration failed:', error);
+          });
+      });
+    }
+
+    /* ==========================================================================
+       INITIALIZE ON DOM CONTENT LOADED
+       ========================================================================== */
+    document.addEventListener('DOMContentLoaded', () => {
+      new DualClocks();
+      new ConnectionCanvas('connectionCanvas');
+      new LiveCounter();
+      new InteractiveCapsule();
+      new BackgroundStars('starsCanvas');
+      new MobileInstallManager();
+    });
+  </script>
+</body>
+</html>
